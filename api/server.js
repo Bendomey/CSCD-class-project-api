@@ -21,6 +21,8 @@ mongoose.connect(process.env.DATABASE, {
 //import models
 require('./models/user');
 require('./models/department');
+require('./models/hall');
+require('./models/room');
 
 //create instance of express
 const app = express();
