@@ -15,11 +15,26 @@ Route.route('/login')
 Route.route('/department/create')
     .post(DepartmentController.sanitize_body, ErrorHandler.catchErrors(DepartmentController.create));
 
+Route.route('/departments')
+	.get(ErrorHandler.catchErrors(DepartmentController.readAll))
+
 Route.route('/hall/create')
     .post(HallController.sanitize_body, ErrorHandler.catchErrors(HallController.create));
 
+Route.route('/halls')
+	.get(ErrorHandler.catchErrors(HallController.readAll))
+
 Route.route('/room/create')
     .post(RoomController.sanitize_room, ErrorHandler.catchErrors(RoomController.generateRoom), ErrorHandler.catchErrors(RoomController.create));
+
+Route.route('/rooms/:hallId')
+	.get(ErrorHandler.catchErrors(RoomController.getRooms))
+
+Route.route('/room/:roomId')
+	.get(ErrorHandler.catchErrors(RoomController.getRoom))
+
+Route.route('/room/users/:roomId')
+	.get(ErrorHandler.catchErrors(RoomController.getRoomsWithUsers))
 
 Route.route('/room/applyToRoom')
     .post(ErrorHandler.catchErrors(RoomController.applyToRoom));

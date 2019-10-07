@@ -33,3 +33,15 @@ exports.create = async (req, res) => {
             data:dept
         });
 };
+
+exports.readAll = async(req, res) => {
+    let dept = await Department.find();
+    return res
+        .status(200)
+        .json({
+            ok:true,
+            error:false,
+            success:true,
+            data:dept
+        })
+}

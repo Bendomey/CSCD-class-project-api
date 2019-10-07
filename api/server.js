@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const validator = require('express-validator');
 const mongoose = require('mongoose');
+const cors = require('cors');
 
 require('dotenv').config({path: '.env'});
 const PORT = 5000 || process.env.PORT;
@@ -26,6 +27,8 @@ require('./models/room');
 
 //create instance of express
 const app = express();
+
+app.use(cors());
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));

@@ -28,14 +28,17 @@ const userSchema = mongoose.Schema({
     },
     departmentID:{
         type: mongoose.Schema.ObjectId,
-        ref:'Department',
-        required:true
+        ref:'Department'
     },
     userType:{
         type:String,
         enum:['admin','student'],
         required:true
     },
+    roomId:{
+        type:mongoose.Schema.ObjectId,
+        ref:'Room'
+    }
 },{
     timestamps:true,
     toJSON:{
@@ -52,6 +55,13 @@ userSchema.virtual('department',{
     foreignField:'_id',
     justOne:true
 });
+
+userSchema.virtual('room',{
+    ref:'Room',
+    localField:'roomId',
+    foreignField:'_id',
+    justOne:true
+})
 
 const User = mongoose.model('User', userSchema);
 

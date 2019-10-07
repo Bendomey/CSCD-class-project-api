@@ -33,3 +33,15 @@ exports.create = async(req, res) => {
             data:hall
         });
 };
+
+exports.readAll = async(req, res) => {
+    let hall = await Hall.find();
+    return res
+        .status(200)
+        .json({
+            ok:true,
+            error:false,
+            success:true,
+            data:hall
+        })
+}

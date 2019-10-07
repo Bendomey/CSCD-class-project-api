@@ -45,6 +45,33 @@ exports.create = async(req, res) => {
         });
 };
 
+exports.getRooms = async (req, res) => {
+    let room = await Room.find({
+        hallId:req.params.hallId,
+    });
+    const rooms = room.filter(roo => roo.usersId.length !== 4);
+    return res.status(200)
+        .json({
+            ok:true,
+            error:false,
+            success:true,
+            data:rooms
+        });
+};
+
+exports.getRoom = async (req, res) => {
+    let room = await Room.findOne({
+        _id:req.params.roomId
+    });
+    return res.status(200)
+        .json({
+            ok:true,
+            error:false,
+            success:true,
+            data:room
+        });
+};
+
 exports.applyToRoom = async (req, res) => {
     let user = await User.findOne({
         _id:req.body.id
@@ -52,35 +79,47 @@ exports.applyToRoom = async (req, res) => {
     let room = await Room.findOne({
         _id:req.body.roomId
     });
-    if(room.usersId.length < 4){
-        if(!room.usersId.includes(user._id)){
-            await room.update({
-                $push:{
-                    usersId: user._id
-                }
-            });
-            return res.status(200)
-                .json({
-                    ok:true,
-                    error:false,
-                    success:true,
-                    data:room,
+    if(user.roomId == null){
+        if(room.usersId.length < 4 ){
+            if(!room.usersId.includes(user._id)){
+                await room.update({
+                    $push:{
+                        usersId: user._id
+                    }
                 });
+                await user.update({
+                    roomId:room._id
+                });
+                return res.status(200)
+                    .json({
+                        ok:true,
+                        error:false,
+                        success:true,
+                        data:room,
+                    });
+            }
+                return res.status(400)
+                    .json({
+                        ok:false,
+                        error:'User already registered under this room',
+                        success:false,
+                    });
+
         }
+            return res.status(400)
+                .json({
+                    ok:false,
+                    error:"Room is full",
+                    success:false
+                });
+    }
         return res.status(400)
             .json({
                 ok:false,
-                error:'User already registered under this room',
-                success:false,
+                error:"Student already registered in a room",
+                success:false
             });
-
-    }
-    return res.status(400)
-        .json({
-            ok:false,
-            error:"Room is full",
-            success:false
-        });
+    
 
 };
 
@@ -97,6 +136,9 @@ exports.removeFromRoom = async(req, res) => {
               usersId:user._id
           }
       });
+      await user.update({
+        roomId:undefined
+      })
         return res.status(200)
             .json({
                 ok:true,
@@ -111,6 +153,17 @@ exports.removeFromRoom = async(req, res) => {
             error:"User is not registered here",
             success:false
         });
+};
+
+exports.getRoomsWithUsers = async(req, res) => {
+    let room = await Room.find().populate('users');
+    return res.status(200)
+            .json({
+                ok:true,
+                error:false,
+                success:true,
+                data:room,
+            });
 };
 
 const generate = (code) => {

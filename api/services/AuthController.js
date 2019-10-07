@@ -12,7 +12,6 @@ exports.sanitize_body = (req, res, next) => {
     req.checkBody('lastName','Last name field cannot be empty').notEmpty();
     req.checkBody('gender','Gender field cannot be empty').notEmpty();
     req.checkBody('dob','Date of birth cannot be empty').notEmpty();
-    req.checkBody('departmentID','Department field cannot be empty, choose a valid field').notEmpty();
     req.checkBody('userType','User Type field cannot be empty').notEmpty();
     let errors = req.validationErrors();
     if(errors){
@@ -28,6 +27,9 @@ exports.sanitize_body = (req, res, next) => {
 };
 
 exports.generateAuth = (req, res, next) => {
+    if(req.body.departmentID == ''){
+      req.body.departmentID = null;
+    }
     req.body.id = generateID();
     req.body.pin = generatePin();
     next();
