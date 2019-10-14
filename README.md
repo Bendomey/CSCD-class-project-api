@@ -10,4 +10,4 @@ _NB_: ID = `10606785` and PIN = `67252` for logging in as an administrator
 ## How the system works
 1. The application is categorized with two users. Thus the `Administrator` and the `User`
 2. The `Administrator`registers student, add halls and their rooms and adds Deparmtents.
-3. The  `User` selects their rooms they wish to be in.
+3. The  `User` _selects_ their rooms they wish to be in. Room can be _deleted_ too.
